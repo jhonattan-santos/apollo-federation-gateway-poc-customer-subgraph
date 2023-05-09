@@ -22,30 +22,26 @@ directive @inaccessible on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUM
 
 directive @override(from: String!) on FIELD_DEFINITION
 
-type Employee {
-  id: ID!
+type PendingDocument {
+  id: ID
   name: String
-  agency: String
-  email: String
-  role: [String!]
+  customerId: ID
   creationDate: String
 }
 
-type Account {
+type Offers {
   id: ID
   name: String
-  agency: String
-  employeeId: String
-  balance: String
-  employee: Employee
+  customerId: ID
   creationDate: String
 }
 
 type Customer {
-  id: ID!
+  id: ID
   name: String
-  accountId: String
-  account: Account
+  accountId: ID
+  pendingDocuments: PendingDocument
+  offers: Offers
   email: String
   jobPosition: String
   salary: String

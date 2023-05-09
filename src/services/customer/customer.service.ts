@@ -15,12 +15,14 @@ export class CustomerService {
 
   async findCustomerByAccountId(id: string): Promise<Customer[]> {
     const { data } = await firstValueFrom(
-      this.httpService.get<Customer[]>(`${this.baseURL}/customer?accountId=${id}`).pipe(
-        catchError((error: AxiosError) => {
-          this.logger.error(error.response.data);
-          throw 'An error happened!';
-        }),
-      ),
+      this.httpService
+        .get<Customer[]>(`${this.baseURL}/customer?accountId=${id}`)
+        .pipe(
+          catchError((error: AxiosError) => {
+            this.logger.error(error.response.data);
+            throw 'An error happened!';
+          }),
+        ),
     );
     return data;
   }
@@ -40,12 +42,16 @@ export class CustomerService {
   @ResolveReference()
   async resolveReference(reference: { __typename: string; accountId: string }) {
     const { data } = await firstValueFrom(
-      this.httpService.get<Customer[]>(`${this.baseURL}/customer?accountId=${reference.accountId}`).pipe(
-        catchError((error: AxiosError) => {
-          this.logger.error(error.response.data);
-          throw 'An error happened!';
-        }),
-      ),
+      this.httpService
+        .get<Customer[]>(
+          `${this.baseURL}/customer?accountId=${reference.accountId}`,
+        )
+        .pipe(
+          catchError((error: AxiosError) => {
+            this.logger.error(error.response.data);
+            throw 'An error happened!';
+          }),
+        ),
     );
     return data;
   }

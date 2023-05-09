@@ -7,7 +7,6 @@ import {
   ResolveReference,
   Resolver,
 } from '@nestjs/graphql';
-import { Account } from './entities/account.entity';
 import { CustomerService } from './customer.service';
 import { Customer } from './entities/customer.entity';
 
@@ -17,7 +16,9 @@ export class CustomerResolver {
 
   @Query((returns) => [Customer])
   async customer(@Args('accountId') accountId: string): Promise<Customer[]> {
-    const customer = await this.customerService.findCustomerByAccountId(accountId);
+    const customer = await this.customerService.findCustomerByAccountId(
+      accountId,
+    );
     if (!customer) {
       throw new NotFoundException(accountId);
     }
@@ -31,12 +32,22 @@ export class CustomerResolver {
 
   @ResolveReference()
   async resolveReference(reference: { __typename: string; accountId: string }) {
-    const employee = await this.customerService.findCustomerByAccountId(
+    const customer = await this.customerService.findCustomerByAccountId(
       reference.accountId,
     );
-    if (!employee) {
+    if (!customer) {
       throw new NotFoundException(reference.accountId);
     }
-    return employee[0];
+    return customer[0];
+  }
+
+  @ResolveField('pendingDocuments')
+  pendingDocuments(@Parent() customer: Customer) {
+    return { __typename: 'PendingDocument', customerId: customer.id };
+  }
+
+  @ResolveField('offers')
+  offers(@Parent() customer: Customer) {
+    return { __typename: 'Offers', customerId: customer.id };
   }
 }

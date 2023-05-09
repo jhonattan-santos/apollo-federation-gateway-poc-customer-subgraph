@@ -1,20 +1,24 @@
 import { Directive, Field, ID, ObjectType } from '@nestjs/graphql';
-import { Account } from './account.entity';
+import { PendingDocument } from './pending-document.entity';
+import { Offers } from './offers.entity';
 
 @ObjectType()
-@Directive('@key(fields: "id")')
+@Directive('@key(fields: "accountId")')
 export class Customer {
-  @Field((type) => ID)
+  @Field((type) => ID, { nullable: true })
   id: string;
 
   @Field((type) => String, { nullable: true })
   name: string;
 
-  @Field((type) => String, { nullable: true })
+  @Field((type) => ID, { nullable: true })
   accountId: string;
 
-  @Field((type) => Account, { nullable: true })
-  account: Account;
+  @Field((type) => PendingDocument, { nullable: true })
+  pendingDocuments: PendingDocument;
+
+  @Field((type) => Offers, { nullable: true })
+  offers: Offers;
 
   @Field((type) => String, { nullable: true })
   email: string;
@@ -43,7 +47,7 @@ export class FamilyMember {
 
   @Field((type) => String, { nullable: true })
   name: string;
-  
+
   @Field((type) => String, { nullable: true })
   type: string;
 }
